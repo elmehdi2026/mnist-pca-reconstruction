@@ -89,7 +89,7 @@ with col_visu:
     
     st.pyplot(fig_imgs)
     
-    # --- AJOUT EXCLUSIF : AFFICHAGE DE L'IMAGE COMPRESSÉE SOUS FORME DE VECTEUR 1D ---
+    # --- LA CORRECTION EST ICI ---
     st.markdown("---")
     st.write("### 🗜️ L'image sous sa forme COMPRESSÉE (Ce que stocke la machine)")
     
@@ -98,7 +98,9 @@ with col_visu:
     ax_comp.set_yticks([])  # Pas d'axe vertical, c'est un vecteur 1D
     ax_comp.set_xlabel("Coordonnées dans le nouvel espace des composantes principales")
     ax_comp.set_title(f"Vecteur compressé : {img_compressed.shape[1]} valeur(s) au lieu de 784 pixels !")
-    fig_comp.colorbar(im, ax_comp=ax_comp, orientation='horizontal', pad=0.5)
+    
+    # Correction : Changement de ax_comp=ax_comp en ax=ax_comp
+    fig_comp.colorbar(im, ax=ax_comp, orientation='horizontal', pad=0.5)
     
     st.pyplot(fig_comp)
     
