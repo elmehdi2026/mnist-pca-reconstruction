@@ -9,10 +9,9 @@ st.set_page_config(page_title="TP PCA - Master IAENG", layout="wide")
 st.title("TP PCA : Compression, Reconstruction & Débruitage sur MNIST")
 st.subheader("EL MEHDI - Master IAENG")
 
-# --- 1. CHARGEMENT OPTIMISÉ DU DATASET (Comme dans le TP LDA) ---
+# --- 1. CHARGEMENT OPTIMISÉ DU DATASET ---
 @st.cache_data
 def load_mnist():
-    # Chargement de MNIST
     mnist = fetch_openml('mnist_784', version=1, as_frame=False, parser='auto')
     X, y = mnist.data / 255.0, mnist.target.astype(int)
     # Filtrage pour ne garder que les 0 et les 1 (par cohérence avec le TP LDA)
@@ -68,7 +67,7 @@ pca = PCA(n_components=n_components)
 # Application de la PCA sur le dataset (Aller)
 X_compressed = pca.fit_transform(X)
 
-# Encodage et reconstruction spécifique de l'image choisie (Retour en arrière)
+# Encodage et reconstruction spécifique de l'image choisie
 img_compressed = pca.transform(image_originale.reshape(1, -1))
 image_reconstruite = pca.inverse_transform(img_compressed).reshape(28, 28)
 
@@ -90,6 +89,22 @@ with col_visu:
     
     st.pyplot(fig_imgs)
     
+    # --- AJOUT EXCLUSIF : AFFICHAGE DE L'IMAGE COMPRESSÉE SOUS FORME DE VECTEUR 1D ---
+    st.markdown("---")
+    st.write("### 🗜️ L'image sous sa forme COMPRESSÉE (Ce que stocke la machine)")
+    
+    fig_comp, ax_comp = plt.subplots(figsize=(8, 1.2))
+    im = ax_comp.imshow(img_compressed, cmap='viridis', aspect='auto')
+    ax_comp.set_yticks([])  # Pas d'axe vertical, c'est un vecteur 1D
+    ax_comp.set_xlabel("Coordonnées dans le nouvel espace des composantes principales")
+    ax_comp.set_title(f"Vecteur compressé : {img_compressed.shape[1]} valeur(s) au lieu de 784 pixels !")
+    fig_comp.colorbar(im, ax_comp=ax_comp, orientation='horizontal', pad=0.5)
+    
+    st.pyplot(fig_comp)
+    
+    if n_components <= 10:
+        st.write("**Valeurs numériques exactes envoyées pour la reconstruction :**", img_compressed[0])
+        
     # Graphique de la variance cumulée pour illustrer l'optimisation (Méthode du Coude)
     st.markdown("---")
     st.write("### 📈 Courbe de l'optimisation de la variance (Scree Plot)")
