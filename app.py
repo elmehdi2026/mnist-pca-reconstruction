@@ -36,7 +36,7 @@ with col_ctrl:
     st.write("### 🎛️ Mode de sélection des composantes")
     mode = st.radio("Choisir le type de test :", [
         "Test 1 : PCA-1 (Retour en arrière extrême)", 
-        "Test 2 & 3 : Variance ciblée (Optimisation & QR Code)", 
+        "Test 2 & 3 : Variance ciblée (Optimisation)", 
         "Test 4 : Noise Cancellation (Débruitage)"
     ])
 
@@ -45,11 +45,9 @@ with col_ctrl:
         n_components = 1
         st.info("PCA-1 : L'image va être écrasée sur un seul axe discriminant avant le 'retour en arrière'.")
         
-    elif mode == "Test 2 & 3 : Variance ciblée (Optimisation & QR Code)":
+    elif mode == "Test 2 & 3 : Variance ciblée (Optimisation)":
         variance_target = st.slider("Variance expliquée ciblée", 0.10, 0.99, 0.40, step=0.05)
         st.write(f"Cible actuelle : **{variance_target*100:.0f}%** de l'information.")
-        if variance_target == 0.40:
-            st.warning("💡 Note du prof : À 40%, l'image reconstruite ressemble à une structure géométrique brute (style QR Code).")
         
         # Fonction mise en cache pour accélérer la recherche de la variance
         @st.cache_data
